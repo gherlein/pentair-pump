@@ -130,13 +130,14 @@ int main(int argc, char *argv[]) {
 }
 
 int readEchoLoop(int fd) {
+    printf("reading...\n");
     do {
         unsigned char buf[256];
         int rdlen = 0;
         memset(buf, 0x00, 256);
 
         rdlen = read(fd, buf, 1);
-        // printf("read %d\n", rdlen);
+        printf("read %d\n", rdlen);
         if (rdlen > 0) {
             for (int x = 0; x < rdlen; x++) {
                 printf("%02x ", (unsigned int)buf[x]);
