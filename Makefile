@@ -1,5 +1,6 @@
 SRC := ser.c
-OUT := ser
+OUT := pump
+OUTARM := pump-arm
 
 all:
 	gcc ${SRC} -o ${OUT}
@@ -9,4 +10,3 @@ arm:
 
 clean:
 	-@rm -Rf *~ ${OUT}
-
