@@ -131,9 +131,8 @@ int main(int argc, char *argv[]) {
     tcdrain(fd); /* delay for output */
     printf("wrote %d bytes\n", slen);
 
-    readEchoLoop(fd);
-
-    /* simple noncanonical input */
+    // readEchoLoop(fd);
+    readPort(fd, 2000);
 }
 
 int readPort(int fd, int ms) {
