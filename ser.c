@@ -106,15 +106,15 @@ int main(int argc, char *argv[]) {
     buffer[6] = 0x10;
     buffer[7] = 0x07;
     buffer[8] = 0x00;
-    buffer[9] = 0x01;   // checksum
-    buffer[10] = 0x1C;  // checksum
+    buffer[9] = 0x00;   // checksum
+    buffer[10] = 0x00;  // checksum
     slen = 11;
     u1.word = buffer[3] + buffer[4] + buffer[5] + buffer[6] + buffer[7] + buffer[8];
     printf("Checksum: %04X\n", u1.word);
     printf("or: %02X %02X\n", u1.byte1, u1.byte2);
     fflush(stdout);
-    // buffer[8] = u1.byte1;
-    // buffer[9] = u1.byte2;
+    buffer[9] = u1.byte1;
+    buffer[10] = u1.byte2;
 
 #if 0
     buffer[0] = 0xFF;
