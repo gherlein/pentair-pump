@@ -153,6 +153,7 @@ int readEchoLoop(int fd) {
     printf("reading...\n");
     do {
         printf(".");
+        fflush(stdout);
         unsigned char buf[256];
         int rdlen = 0;
         memset(buf, 0x00, 256);
