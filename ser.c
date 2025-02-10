@@ -135,6 +135,7 @@ int main(int argc, char *argv[]) {
     for (int x = 0; x < slen; x++) {
         printf("%02X ", (unsigned int)buffer[x]);
     }
+    printf("\n");
 
     wlen = write(fd, buffer, slen);
     if (wlen != slen) {
@@ -151,6 +152,7 @@ int main(int argc, char *argv[]) {
 int readEchoLoop(int fd) {
     printf("reading...\n");
     do {
+        printf(".");
         unsigned char buf[256];
         int rdlen = 0;
         memset(buf, 0x00, 256);
