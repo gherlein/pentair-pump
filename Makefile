@@ -10,3 +10,8 @@ arm:
 
 clean:
 	-@rm -Rf *~ ${OUT}
+
+git:
+	git add -A
+	git commit -m "auto commit"
+	git push
