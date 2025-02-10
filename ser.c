@@ -6,10 +6,12 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/select.h>
 #include <termios.h>
 #include <unistd.h>
 
 int readEchoLoop(int fd);
+int readPort(int fd, int ms);
 
 union {
     uint16_t word;
@@ -68,20 +70,20 @@ void set_mincount(int fd, int mcount) {
 }
 
 int main(int argc, char *argv[]) {
-    char *portname0 = "/dev/ttyUSB0";
-    char *portname1 = "/dev/ttyUSB1";
     char *portname;
     int loop = 0;
     int fd;
     int slen, wlen;
 
-    if (argc > 1 && strncmp(argv[1], "echo", strlen("echo")) == 0) {
-        portname = portname1;
+    if (argc < 2) {
+        printf("Usage: %s <port> [echo]\n", argv[0]);
+        return -1;
+    }
+    portname = argv[1];
+
+    if (argc > 2 && strncmp(argv[2], "echo", strlen("echo")) == 0) {
         loop = 1;
         printf("Looping on %s\n", portname);
-    } else {
-        portname = portname0;
-        printf("Writing to %s\n", portname);
     }
     fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
     if (fd < 0) {
@@ -110,28 +112,13 @@ int main(int argc, char *argv[]) {
     buffer[10] = 0x00;  // checksum
     slen = 11;
     u1.word = buffer[3] + buffer[4] + buffer[5] + buffer[6] + buffer[7] + buffer[8];
+    // u1.word = (u1.word%256)
     printf("Checksum: %04X\n", u1.word);
     printf("or: %02X %02X\n", u1.byte1, u1.byte2);
     fflush(stdout);
     buffer[9] = u1.byte2;
     buffer[10] = u1.byte1;
 
-#if 0
-    buffer[0] = 0xFF;
-    buffer[1] = 0x00;
-    buffer[2] = 0xFF;
-    buffer[3] = 0xA5;
-    buffer[4] = 0x00;
-    buffer[5] = 0x60;
-    buffer[6] = 0x10;
-    buffer[6] = 0x07;
-    buffer[6] = 0x00;
-    buffer[7] = 0x01;
-    buffer[8] = 0xFF;
-    buffer[9] = 0x02;   // checksum
-    buffer[10] = 0x19;  // checksum
-    slen = 11;
-#endif
     for (int x = 0; x < slen; x++) {
         printf("%02X ", (unsigned int)buffer[x]);
     }
@@ -147,6 +134,28 @@ int main(int argc, char *argv[]) {
     readEchoLoop(fd);
 
     /* simple noncanonical input */
+}
+
+int readPort(int fd, int ms) {
+    struct timeval tv;
+    fd_set rset;
+    int retV;
+    int timeout = ms;  // 5 seconds
+
+    tv.tv_usec = (timeout * 1000) % 1000000;
+    tv.tv_sec = timeout / 1000;
+
+    FD_ZERO(&rset);
+    FD_SET(fd, &rset);
+    retV = select(fd + 1, &rset, NULL, NULL, &tv);
+
+    if (retV == 0) {
+        // timeout stuff
+    } else if (retV < 0) {
+        // Error stuff. Read errno to see what happened
+    } else {
+        // read data
+    }
 }
 
 int readEchoLoop(int fd) {
