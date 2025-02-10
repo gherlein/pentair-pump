@@ -113,8 +113,8 @@ int main(int argc, char *argv[]) {
     printf("Checksum: %04X\n", u1.word);
     printf("or: %02X %02X\n", u1.byte1, u1.byte2);
     fflush(stdout);
+    buffer[8] = u1.byte1;
     buffer[9] = u1.byte2;
-    buffer[10] = u1.byte1;
 
 #if 0
     buffer[0] = 0xFF;
