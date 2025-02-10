@@ -97,19 +97,18 @@ int main(int argc, char *argv[]) {
     }
     unsigned char buffer[256];
 
-#if 0
-    buffer[0] = 0xFF;
-    buffer[1] = 0x00;
-    buffer[2] = 0xFF;
-    buffer[3] = 0xA5;
-    buffer[4] = 0x00;
-    buffer[5] = 0x60;
-    buffer[6] = 0x10;
-    buffer[7] = 0x07;
-    buffer[8] = 0x00;
-    buffer[9] = 0x00;   // checksum
-    buffer[10] = 0x00;  // checksum
-    slen = 11;
+    // buffer[0] = 0xFF;
+    buffer[0] = 0x00;
+    buffer[1] = 0xFF;
+    buffer[2] = 0xA5;
+    buffer[3] = 0x00;
+    buffer[4] = 0x60;
+    buffer[5] = 0x10;
+    buffer[6] = 0x07;
+    buffer[7] = 0x00;
+    buffer[8] = 0x00;  // checksum
+    buffer[9] = 0x00;  // checksum
+    slen = 10;
     u1.word = buffer[3] + buffer[4] + buffer[5] + buffer[6] + buffer[7] + buffer[8];
     printf("Checksum: %04X\n", u1.word);
     printf("or: %02X %02X\n", u1.byte1, u1.byte2);
@@ -117,7 +116,7 @@ int main(int argc, char *argv[]) {
     buffer[9] = u1.byte1;
     buffer[10] = u1.byte2;
 
-#endif
+#if 0
     buffer[0] = 0xFF;
     buffer[1] = 0x00;
     buffer[2] = 0xFF;
@@ -132,7 +131,7 @@ int main(int argc, char *argv[]) {
     buffer[9] = 0x02;   // checksum
     buffer[10] = 0x19;  // checksum
     slen = 11;
-
+#endif
     for (int x = 0; x < slen; x++) {
         printf("%02X ", (unsigned int)buffer[x]);
     }
