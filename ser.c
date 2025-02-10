@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
     buffer[3] = 0x00;
     buffer[4] = 0x60;
     buffer[5] = 0x10;
-    buffer[6] = 0x07;
+    buffer[6] = 0x06;
     buffer[7] = 0x00;
     buffer[8] = 0x00;  // checksum
     buffer[9] = 0x00;  // checksum
