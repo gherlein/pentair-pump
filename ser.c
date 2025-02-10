@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
     }
     /*baudrate 9600, 8 bits, no parity, 1 stop bit */
     set_interface_attribs(fd, B9600);
-    set_mincount(fd, 0); /* set to pure timed read */
+    // set_mincount(fd, 0); /* set to pure timed read */
 
     if (loop) {
         readEchoLoop(fd);
@@ -140,7 +140,9 @@ int readPort(int fd, int ms) {
     fd_set rset;
     int retV;
     int timeout = ms;  // 5 seconds
-
+    unsigned char buf[256];
+    int rdlen = 0;
+    memset(buf, 0x00, 256);
     tv.tv_usec = (timeout * 1000) % 1000000;
     tv.tv_sec = timeout / 1000;
 
@@ -150,10 +152,18 @@ int readPort(int fd, int ms) {
 
     if (retV == 0) {
         // timeout stuff
+        printf("Timeout\n");
     } else if (retV < 0) {
-        // Error stuff. Read errno to see what happened
+        printf("Error\n");  // Error stuff. Read errno to see what happened
     } else {
-        // read data
+        rdlen = read(fd, buf, 1);
+        printf("read %d\n", rdlen);
+        if (rdlen > 0) {
+            for (int x = 0; x < rdlen; x++) {
+                printf("%02x ", (unsigned int)buf[x]);
+                fflush(stdout);
+            }
+        }
     }
 }
 
