@@ -117,6 +117,10 @@ int main(int argc, char *argv[]) {
     buffer[9] = u1.byte1;
     buffer[10] = u1.byte2;
 
+    for (int x = 0; x < slen; x++) {
+        printf("%02X ", (unsigned int)buffer[x]);
+    }
+
     wlen = write(fd, buffer, slen);
     if (wlen != slen) {
         printf("Error from write: %d, %d\n", wlen, errno);
