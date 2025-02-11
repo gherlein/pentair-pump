@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
     buffer[1] = 0x00;
     buffer[2] = 0xFF;
     buffer[3] = 0xA5;
-    buffer[4] = 0x00;
+    buffer[4] = 0x01;
     buffer[5] = 0x60;
     buffer[6] = 0x10;
     buffer[7] = 0x07;
