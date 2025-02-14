@@ -72,6 +72,7 @@ void set_mincount(int fd, int mcount) {
 int main(int argc, char *argv[]) {
     char *portname;
     int loop = 0;
+   
     int fd;
     int slen, wlen;
 
@@ -103,34 +104,42 @@ int main(int argc, char *argv[]) {
     buffer[1] = 0x00;
     buffer[2] = 0xFF;
     buffer[3] = 0xA5;
-    buffer[4] = 0x01;
+    buffer[4] = 0x00;
     buffer[5] = 0x60;
     buffer[6] = 0x10;
-    buffer[7] = 0x07;
-    buffer[8] = 0x00;
-    buffer[9] = 0x00;   // checksum
-    buffer[10] = 0x00;  // checksum
-    slen = 11;
+    buffer[7] = 0x04;
+    buffer[8] = 0x01;
+    buffer[9] = 0xFF;  
+    buffer[10] = 0x02;
+    buffer[11] = 0x19;
+    
+
+//    buffer[7] = 0x07;
+//    buffer[8] = 0x00;
+//    buffer[9] = 0x00;   // checksum
+//    buffer[10] = 0x00;  // checksum
+    slen = 12;
     u1.word = buffer[3] + buffer[4] + buffer[5] + buffer[6] + buffer[7] + buffer[8];
     // u1.word = (u1.word%256)
-    printf("Checksum: %04X\n", u1.word);
-    printf("or: %02X %02X\n", u1.byte1, u1.byte2);
-    fflush(stdout);
-    buffer[9] = u1.byte2;
-    buffer[10] = u1.byte1;
+//    printf("Checksum: %04X\n", u1.word);
+//    printf("or: %02X %02X\n", u1.byte1, u1.byte2);
+//    fflush(stdout);
+//    buffer[9] = u1.byte2;
+//    buffer[10] = u1.byte1;
 
     for (int x = 0; x < slen; x++) {
         printf("%02X ", (unsigned int)buffer[x]);
     }
     printf("\n");
 
+    while(1) {
     wlen = write(fd, buffer, slen);
     if (wlen != slen) {
         printf("Error from write: %d, %d\n", wlen, errno);
     }
     tcdrain(fd); /* delay for output */
     printf("wrote %d bytes\n", slen);
-
+    }
     // readEchoLoop(fd);
     readPort(fd, 2000);
 }
