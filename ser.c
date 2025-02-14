@@ -132,14 +132,14 @@ int main(int argc, char *argv[]) {
     }
     printf("\n");
 
-    while(1) {
+//    while(1) {
     wlen = write(fd, buffer, slen);
     if (wlen != slen) {
         printf("Error from write: %d, %d\n", wlen, errno);
     }
     tcdrain(fd); /* delay for output */
     printf("wrote %d bytes\n", slen);
-    }
+//    }
     // readEchoLoop(fd);
     readPort(fd, 2000);
 }
